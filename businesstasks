@@ -1,0 +1,76 @@
+import os
+
+DATA_DIR = "/data"
+
+def is_safe_path(file_path):
+    abs_path = os.path.abspath(file_path)
+    return abs_path.startswith(os.path.abspath(DATA_DIR))
+if not is_safe_path(requested_path):
+    return {"error": "Access denied outside /data"}, 403
+def delete_file_attempted():
+    return {"error": "File deletion is not allowed"}, 403
+if "delete" in task_description.lower():
+    return delete_file_attempted()
+import requests
+
+def fetch_and_save(url, output_path):
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(output_path, "w") as file:
+            file.write(response.text)
+        return {"message": "Data saved successfully"}
+    return {"error": "Failed to fetch data"}, 400
+from git import Repo
+
+def clone_and_commit(repo_url, commit_message):
+    repo = Repo.clone_from(repo_url, "/data/repo")
+    repo.index.add(["*"])
+    repo.index.commit(commit_message)
+    repo.remote().push()
+    return {"message": "Commit successful"}
+import sqlite3
+
+def run_sqlite_query(db_path, query):
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+    cur.execute(query)
+    result = cur.fetchall()
+    conn.commit()
+    conn.close()
+    return {"result": result}
+from bs4 import BeautifulSoup
+import requests
+
+def scrape_website(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    return {"title": soup.title.string}
+from PIL import Image
+
+def resize_image(input_path, output_path, size=(100, 100)):
+    img = Image.open(input_path)
+    img = img.resize(size)
+    img.save(output_path)
+    return {"message": "Image resized successfully"}
+import speech_recognition as sr
+
+def transcribe_audio(audio_path):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(audio_path) as source:
+        audio = recognizer.record(source)
+    return {"transcription": recognizer.recognize_google(audio)}
+import markdown
+
+def md_to_html(md_path, html_path):
+    with open(md_path, "r") as file:
+        md_content = file.read()
+    html_content = markdown.markdown(md_content)
+    with open(html_path, "w") as file:
+        file.write(html_content)
+    return {"message": "Markdown converted to HTML"}
+import pandas as pd
+
+def filter_csv(csv_path, column, value):
+    df = pd.read_csv(csv_path)
+    filtered_df = df[df[column] == value]
+    return filtered_df.to_json(orient="records")
